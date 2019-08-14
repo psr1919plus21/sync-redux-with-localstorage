@@ -2,6 +2,12 @@
 
 Every time when store change occurs, specified field automatically write to localStorage
 
+### Download
+```
+npm i sync-redux-with-localstorage -D
+```
+
+
 ### Example:
 ```
 import syncReduxWithLocalstorage from 'sync-redux-with-localstorage';
