@@ -1,12 +1,42 @@
-export default storeFieldToSave => store => next => action => {
-    const prevState = store.getState();
-    const result = next(action);
-    const nextState = store.getState();
+module.exports = function applyInterface(state, syncInterface) {
+    let result = {};
 
-    if (JSON.stringify(prevState[storeFieldToSave]) !== JSON.stringify(nextState[storeFieldToSave])) {
-        window.localStorage.setItem(`reduxLocalStorage:${storeFieldToSave}`,
-            JSON.stringify(nextState[storeFieldToSave]));
+    if (!isPlainObject(state)) {
+        console.warn('WARNING! "state" must be a plain object.' );
+        console.warn('state: ', JSON.stringify(state, null, 2));
+    }
+
+    if (!isPlainObject(syncInterface)) {
+        console.warn('WARNING! "syncInterface" must be a plain object.' );
+        console.warn('syncInterface: ', JSON.stringify(syncInterface, null, 2));
+    }
+
+    for (var key in syncInterface) {
+        result[key] = get(syncInterface[key], state[key]);
     }
 
     return result;
+}
+
+function get(currentInterfaceInstance, currentStateLevel) {
+    let result;
+    if (currentInterfaceInstance instanceof Array) {
+        result = currentStateLevel.map(item => {
+            return get(currentInterfaceInstance[0], item);
+        });
+
+    } else if (isPlainObject(currentInterfaceInstance)) {
+        result = {};
+        for (var currentKey in currentInterfaceInstance) {
+            result[currentKey] = get(currentInterfaceInstance[currentKey], currentStateLevel[currentKey])
+        }
+    } else if (currentInterfaceInstance) {
+        result = currentStateLevel;
+    }
+    return result;
+}
+
+function isPlainObject(obj) {
+    return Object.prototype.toString.call(obj) === '[object Object]';
 };
+
