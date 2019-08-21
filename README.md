@@ -9,11 +9,44 @@ npm i sync-redux-with-localstorage -D
 
 
 ### Example:
+
+### store
+
+```
+state.cats = [
+   {
+    name: 'Fat Cat',
+    id: 1,
+  },
+ {
+    name: 'Good Cat',
+    id: 2,
+  },
+];
+```
+
+### interface
+
+```
+const syncInterface = {
+  cats: {
+    id: true,
+  },
+}
+```
+
+### usage
 ```
 import syncReduxWithLocalstorage from 'sync-redux-with-localstorage';
 
 export default createStore(
     rootReducer,
-    applyMiddleware(syncReduxWithLocalstorage('field_name')),
+    composeWithDevTools(applyMiddleware(thunk, syncReduxWithLocalstorage(syncInterface))),
 );
+```
+
+### in localStorage will be saved:
+
+```
+  reduxLocalStorage:cats[{ id: 1 }, { id: 2 }]
 ```
