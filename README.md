@@ -48,5 +48,5 @@ export default createStore(
 ### in localStorage will be saved:
 
 ```
-  reduxLocalStorage:cats[{ id: 1 }, { id: 2 }]
+  reduxLocalStorage: "{ "cats" : [{ "id": "1" }, { "id": "2" }]}"
 ```
